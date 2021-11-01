@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+/.vs/*
+*.idb
+*.pdb
+/SuspendBongoCatGUI/Debug/*
+/SuspendBongoCatGUI/Release/*
