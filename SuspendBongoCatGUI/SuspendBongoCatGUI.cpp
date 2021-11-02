@@ -40,6 +40,33 @@ CSuspendBongoCatGUIApp theApp;
 
 BOOL CSuspendBongoCatGUIApp::InitInstance()
 {
+
+	TOKEN_PRIVILEGES tokenPriv;
+	LUID luidDebug;
+	HANDLE hToken = NULL;
+	if (OpenProcessToken(
+		GetCurrentProcess(),
+		TOKEN_ADJUST_PRIVILEGES,
+		&hToken) &&
+		LookupPrivilegeValue(
+			NULL,
+			SE_DEBUG_NAME,
+			&luidDebug))
+	{
+		tokenPriv.PrivilegeCount = 1;
+		tokenPriv.Privileges[0].Luid = luidDebug;
+		tokenPriv.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+
+		AdjustTokenPrivileges(
+			hToken,
+			FALSE,
+			&tokenPriv,
+			sizeof(tokenPriv),
+			NULL,
+			NULL);
+	}
+	if (hToken != NULL)
+		CloseHandle(hToken);
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
 	//则需要 InitCommonControlsEx()。  否则，将无法创建窗口。
@@ -102,6 +129,9 @@ BOOL CSuspendBongoCatGUIApp::InitInstance()
 
 	// 由于对话框已关闭，所以将返回 FALSE 以便退出应用程序，
 	//  而不是启动应用程序的消息泵。
+
+
+
 	return FALSE;
 }
 

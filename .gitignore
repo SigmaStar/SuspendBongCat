@@ -36,3 +36,4 @@
 *.pdb
 /SuspendBongoCatGUI/Debug/*
 /SuspendBongoCatGUI/Release/*
+*.tlog
